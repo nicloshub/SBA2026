@@ -71,6 +71,20 @@ En clases masivas con flotas divididas (ej. Optimist Timoneles y Principiantes d
     * En su flota oficial, al no haber largado/llegado con su grupo, queda sin arribo (o con código `DNC`).
     * Se documenta la novedad en el reporte indicando: *"Vela XXXX corrió fuera de flota (cruzó en Flota Azul perteneciendo a Amarilla) - Sin puesto otorgado"*.
 
+### 2.4. Protocolo Estricto para Planillas y Pizarras de Pasados (Penalidades UFD / BFD / OCS)
+A diferencia de las planillas de llegada (donde se busca identificar qué barco cruzó la línea para no perjudicar a un competidor legítimo), las planillas y pizarras de **pasados / penalidades** siguen una política de **estricta certeza**:
+
+1. **Prohibición de Desambiguar Números Inexistentes en Pasados:**
+   * **Regla:** Si un número anotado en la planilla o pizarra de pasados no existe en el padrón oficial de la flota que largó, **NUNCA se debe intentar desambiguar, permutar dígitos ni forzar coincidencias con barcos inscriptos**.
+   * **Acción:** **SE DEBE IGNORAR POR COMPLETO** el registro anotado (no se le asigna UFD, BFD ni ninguna otra penalidad a ningún barco).
+   * **Fundamento náutico:** La duda beneficia siempre al competidor. Intentar "adivinar" un número mal tomado por la lancha de largada puede descalificar injustamente a un timonel inocente que largó correctamente. Un número inexistente en la planilla de pasados es casi siempre un error de toma de la Comisión de Regatas o un barco ajeno navegando en la zona.
+   *(Caso de referencia: en Timoneles R1 se anotó `4012` en pasados; bajo este protocolo no debe desambiguarse a `4102`).*
+
+2. **Barcos de Otras Flotas en Listados de Pasados:**
+   * Si en la planilla de pasados de una flota (ej. Flota Amarilla) figura anotado un barco perteneciente a otra flota (ej. Flota Azul):
+     * **NO se lo anota como pasado en la flota donde apareció anotado.**
+     * En su propia flota, conserva el resultado legítimo que haya obtenido al correr con su grupo oficial (suele tratarse de una anotación errónea de la CR o de un competidor navegando en la zona de espera/largada ajena).
+
 ---
 
 ## 3. Mecánica Interna y Estructura del Archivo `.blw` (Sailwave)
@@ -154,7 +168,8 @@ Cuando se asigne una nueva regata o evento para procesar:
    * Identificar la clase en `Docs/<Clase>.csv` y abrir/leer `<Clase>.blw`.
    * Verificar asignación de flotas/colores si la clase corre dividida.
 3. **Transcripción y Resolución:**
-   * Transcribir números de llegada. En caso de dudas caligráficas, cruzar contra el universo de inscriptos.
+   * Transcribir números de llegada. En caso de dudas caligráficas en llegadas, cruzar contra el universo de inscriptos.
+   * **Planillas de Pasados (UFD / BFD / OCS):** Si un número anotado como pasado no existe en el padrón de la flota, **IGNORARLO DIRECTAMENTE** (prohibido desambiguar o forzar coincidencias en penalidades). Si figura un barco de otra flota, desestimarlo.
    * Reportar cualquier número no registrado antes de inventar o alterar datos.
 4. **Inyección en `.blw`:**
    * Asignar `raceID` nuevo (o usar el existente si es reapertura).
