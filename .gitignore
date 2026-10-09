@@ -1,0 +1,6 @@
+# Archivos temporales de Office
+~$*
+
+# Archivos de respaldo
+*.bak
+*.tmp
