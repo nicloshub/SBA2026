@@ -148,19 +148,26 @@ function procesarRegata(config) {
       let comp = flotaPadron[s];
 
       if (!comp) {
-        // Intentar desambiguar con variantes de dígitos críticos
+        // Verificar si pertenece a otra flota ('Wrong Flight') según protocolo
+        if (allSails[s] && allSails[s].compflight !== flotaNombre) {
+          alertasPasados.push(`Renglón ${rawPos} Flota ${flotaNombre}: Vela ${s} pertenece a Flota ${allSails[s].compflight} ('Wrong Flight') - Sin puesto otorgado.`);
+          continue; // No se otorga puesto en flota ajena según protocolo
+        }
+
+        // Si no existe como barco en otra flota, intentar desambiguar con variantes de dígitos críticos
         const variants = generateVariants(s).filter(v => flotaPadron[v] && !enteredSails.has(v));
         if (variants.length === 1) {
           const resolved = variants[0];
           desambiguaciones.push(`Renglón ${rawPos} Flota ${flotaNombre}: anotado '${s}' desambiguado unívocamente por padrón a '${resolved}' (${flotaPadron[resolved].comphelmname}).`);
           s = resolved;
           comp = flotaPadron[s];
-        } else if (allSails[s]) {
-          alertasPasados.push(`Renglón ${rawPos} Flota ${flotaNombre}: Vela ${s} pertenece a Flota ${allSails[s].compflight} ('Wrong Flight').`);
-          continue; // No se otorga puesto en flota ajena según protocolo
         } else {
           throw new Error(`CRÍTICO: Renglón ${rawPos} Flota ${flotaNombre}: Vela '${s}' no existe en el padrón ni tiene variante unívoca.`);
         }
+      }
+
+      if (enteredSails.has(s)) {
+        throw new Error(`CRÍTICO: Renglón ${rawPos} Flota ${flotaNombre}: Vela '${s}' ya fue ingresada previamente en esta regata.`);
       }
 
       enteredSails.add(s);
